@@ -1,0 +1,67 @@
+# ── Java ──────────────────────────────────────────────────────
+# Compiled bytecode — never commit .class files
+*.class
+*.jar
+*.war
+*.ear
+
+# Java build output
+target/
+build/
+out/
+bin/
+
+# ── Node / Frontend ───────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+
+# Vite / build output (deploy from CI, not from git)
+dist/
+dist-ssr/
+frontend/dist/
+frontend/dist-ssr/
+
+# Vite cache
+.vite/
+frontend/.vite/
+
+# ── Environment / Config ──────────────────────────────────────
+.env
+.env.local
+.env.*.local
+frontend/.env.local
+frontend/.env.*.local
+
+# ── Logs ──────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── OS ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE / Editor ──────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.user
+*.sln.docstates
+*.njsproj
+*.ntvs*
+
+# ── Test coverage ─────────────────────────────────────────────
+coverage/
+frontend/coverage/
+*.lcov
+
+# ── Misc ──────────────────────────────────────────────────────
+*.local
+*.sw?
+*.bak
+*.tmp
