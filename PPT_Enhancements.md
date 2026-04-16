@@ -1,4 +1,4 @@
-# PPT Enhancements — Mini-Compiler Project
+# PPT Enhancements - Mini-Compiler Project
 ## Slide-by-Slide Recommendations (Updated for Full-Stack + 7 Phases)
 
 ---

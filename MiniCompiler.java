@@ -1,22 +1,6 @@
 import java.util.*;
 
-/**
- * MiniCompiler — A 7-phase mini arithmetic expression compiler.
- *
- * Compiler Phases:
- *   1. Lexical Analysis  — tokenise input into meaningful symbols
- *   2. Syntax Analysis   — recursive-descent parser
- *   3. AST Construction  — build an Abstract Syntax Tree
- *   4. Semantic Analysis — undefined variables, division-by-zero checks
- *   5. Intermediate Code — Three-Address Code (TAC) generation
- *   6. Optimisation      — Constant Folding on the AST
- *   7. Evaluation        — AST-walk evaluator
- *
- * Operators  : + - * / % (modulo), unary -
- * Types      : integers, floating-point
- * Variables  : assignment  x = expr , then re-use x
- * Commands   : vars | clear | exit
- */
+// MiniCompiler - 7-phase arithmetic compiler
 public class MiniCompiler {
 
     // =================== TOKEN TYPES ====================
@@ -227,7 +211,7 @@ public class MiniCompiler {
             while (isMulOp()) {
                 String op = advance().value;
                 // Only recover if we genuinely have no right-hand operand coming.
-                // A leading '-' or '+' after * / % is a valid unary prefix — do NOT recover.
+                // A leading '-' or '+' after * / % is a valid unary prefix - do NOT recover.
                 if (cur().type == TokenType.EOF || cur().type == TokenType.RPAREN) {
                     warn("[Recovery] Missing operand after '" + op + "' -- inserting 1.");
                     return new BinaryOpNode(op, left, new NumberNode(1));
@@ -456,14 +440,11 @@ public class MiniCompiler {
     }
 
     // =================== MAIN COMPILE API ===============
-    /**
-     * compile() — runs all 7 phases and returns a structured CompileResult.
-     * Called by both CLI and the HTTP API server.
-     */
+    // compile() - runs all 7 phases
     static CompileResult compile(String input, Map<String, Double> sym) {
         CompileResult cr = new CompileResult(input);
 
-        // Phase 1 — Lexical Analysis
+        // Phase 1 - Lexical Analysis
         Lexer lexer = new Lexer(input);
         List<Token> tokenList = lexer.tokenize();
         cr.warnings.addAll(lexer.warnings);
@@ -472,7 +453,7 @@ public class MiniCompiler {
             if (t.type != TokenType.EOF)
                 cr.tokens.add(t.type.name() + ":" + t.value);
 
-        // Phase 2 — Syntax Analysis + Phase 3 — AST
+        // Phase 2 - Syntax Analysis + Phase 3 - AST
         Parser parser = new Parser(tokenList);
         ASTNode ast = parser.parse();
         cr.warnings.addAll(parser.warnings);
@@ -483,20 +464,20 @@ public class MiniCompiler {
         cr.ast.addAll(printer.lines);
         cr.astJson = ast.toJson();
 
-        // Phase 4 — Semantic (live in evaluator)
+        // Phase 4 - Semantic (live in evaluator)
 
-        // Phase 5 — TAC on original AST
+        // Phase 5 - TAC on original AST
         CodeGenerator cgOrig = new CodeGenerator();
         cgOrig.generate(ast);
         cr.tac.addAll(cgOrig.getCode());
 
-        // Phase 6 — Constant Folding + optimised TAC
+        // Phase 6 - Constant Folding + optimised TAC
         ASTNode opt = constantFold(cloneAst(ast));
         CodeGenerator cgOpt = new CodeGenerator();
         cgOpt.generate(opt);
         cr.optimisedTac.addAll(cgOpt.getCode());
 
-        // Phase 7 — Evaluation
+        // Phase 7 - Evaluation
         EvalResult er = evalAst(opt, sym);
         cr.result = er.value;
         cr.runtimeErrors.addAll(er.errors);

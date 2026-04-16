@@ -1,5 +1,5 @@
-# ── Java ──────────────────────────────────────────────────────
-# Compiled bytecode — never commit .class files
+# Java
+# Compiled bytecode - never commit .class files
 *.class
 *.jar
 *.war

@@ -5,19 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
 
-/**
- * CompilerServer — lightweight HTTP API server for MiniCompiler.
- *
- * Endpoints:
- *   POST /compile          { "expression": "3 + 5 * 2" }
- *                          Returns CompileResult JSON
- *   GET  /vars             Returns symbol table JSON
- *   POST /vars/clear       Clears symbol table
- *   GET  /health           {"status":"ok"}
- *
- * Each HTTP session shares the same symbol table (per server run).
- * CORS headers are added for the React dev server (localhost:5173).
- */
+// Lightweight HTTP API server for MiniCompiler
 public class CompilerServer {
 
     private static final int PORT = Integer.parseInt(System.getenv().getOrDefault("PORT", "8080"));
@@ -37,7 +25,7 @@ public class CompilerServer {
         System.out.println("[CompilerServer] Press Ctrl+C to stop.");
     }
 
-    // ── /compile ─────────────────────────────────────────────────────────
+    // /compile
     static class CompileHandler implements HttpHandler {
         @Override public void handle(HttpExchange ex) throws IOException {
             addCors(ex);
@@ -60,7 +48,7 @@ public class CompilerServer {
         }
     }
 
-    // ── /vars ─────────────────────────────────────────────────────────────
+    // /vars
     static class VarsHandler implements HttpHandler {
         @Override public void handle(HttpExchange ex) throws IOException {
             addCors(ex);
@@ -78,7 +66,7 @@ public class CompilerServer {
         }
     }
 
-    // ── /vars/clear ──────────────────────────────────────────────────────
+    // /vars/clear
     static class ClearHandler implements HttpHandler {
         @Override public void handle(HttpExchange ex) throws IOException {
             addCors(ex);
@@ -88,7 +76,7 @@ public class CompilerServer {
         }
     }
 
-    // ── /health ──────────────────────────────────────────────────────────
+    // /health
     static class HealthHandler implements HttpHandler {
         @Override public void handle(HttpExchange ex) throws IOException {
             addCors(ex);
@@ -111,7 +99,7 @@ public class CompilerServer {
         h.set("Access-Control-Allow-Headers", "Content-Type");
     }
 
-    /** Minimal JSON string extractor — avoids pulling in a JSON library. */
+    // Minimal JSON string extractor
     static String extractJson(String json, String key) {
         String search = "\"" + key + "\"";
         int idx = json.indexOf(search);

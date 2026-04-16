@@ -1,12 +1,9 @@
 import java.util.*;
 
-/**
- * MiniCompilerTest — pure-Java test runner (no JUnit needed).
- * Run: javac -encoding UTF-8 MiniCompiler.java MiniCompilerTest.java && java MiniCompilerTest
- */
+// MiniCompilerTest - pure-Java test runner
 public class MiniCompilerTest {
 
-    // ── tiny test harness ─────────────────────────────────────────────
+    // tiny test harness
     static int pass = 0, fail = 0;
 
     static void eq(String label, double expected, double actual) {
@@ -110,7 +107,7 @@ public class MiniCompilerTest {
         isTrue("(3+2 has warnings",         !missingParen.warnings.isEmpty());
         eq("(3+2 auto-closed = 5",        5, missingParen.result);
 
-        // ── 9. Lexer — invalid chars ─────────────────────────────────
+        // 9. Lexer - Invalid Characters
         section("9. Lexer - Invalid Characters");
         MiniCompiler.CompileResult invChar = cr("3 + @5");
         isTrue("3+@5 has lexer warning",    invChar.warnings.stream()

@@ -1,103 +1,183 @@
-# Mini-Compiler — Full-Stack 7-Phase Arithmetic Compiler
+# Mini-Compiler: Arithmetic Compiler
 
-A complete **Compiler Design** project featuring a 7-phase arithmetic expression compiler,
-a lightweight Java REST API backend, and a professional React + TypeScript frontend with
-**light / dark theme**, SVG icons, and a per-phase compiler explorer.
-
----
+This project implements a complete compiler design system for arithmetic expressions, featuring a 7-phase compilation pipeline, a Java-based REST API backend, and a React TypeScript frontend with theme support and interactive visualization.
 
 ## Features
 
-| Layer | Technology | Highlights |
-|---|---|---|
-| **Compiler** | Java 17 | 7 phases, floats, variables, `%` modulo, error recovery, constant folding |
-| **Backend** | Java 17 (`com.sun.net.httpserver`) | 4 REST endpoints, no external dependencies, CORS |
-| **Frontend** | React 18 + TypeScript + Vite | Light/dark theme, SVG icons, 7-tab phase inspector, symbol table, history |
-| **Tests** | Pure Java + Vitest | 50 backend + 11 frontend tests |
-
----
+- **Compiler Core**: 7-phase arithmetic expression compiler in Java
+- **Backend**: Lightweight REST API server using Java's built-in HTTP server
+- **Frontend**: Modern React application with TypeScript and Vite
+- **Testing**: Comprehensive unit tests for both backend and frontend
+- **Deployment**: Configured for Vercel (frontend) and Render (backend)
 
 ## Compiler Phases
 
-```
-[1] Lexer  →  [2] Parser  →  [3] AST Build  →  [4] Semantic Analysis
-             →  [5] TAC Gen  →  [6] Constant Folding  →  [7] Evaluation
-```
+1. Lexical Analysis: Tokenization of input expressions
+2. Syntax Analysis: Recursive-descent parsing
+3. AST Construction: Building Abstract Syntax Tree
+4. Semantic Analysis: Variable validation and error checking
+5. Intermediate Code Generation: Three-Address Code (TAC)
+6. Optimization: Constant folding
+7. Evaluation: AST-based expression evaluation
 
-Operators: `+` `-` `*` `/` `%` `( )` · unary `-` · floats · variables (`x = 5 * 2`)
-
----
+Supported operations: arithmetic operators (+, -, *, /, %), variables, parentheses, unary negation, floating-point numbers.
 
 ## Project Structure
 
 ```
-CD Project/
-├── MiniCompiler.java          ← standalone CLI compiler (root, no server needed)
-├── README.md
-├── .gitignore
+MiniCompiler-Studio/
+├── MiniCompiler.java              # Standalone CLI compiler
+├── README.md                      # Project documentation
+├── render.yaml                    # Render deployment configuration
 │
-├── backend/
-│   ├── MiniCompiler.java      ← compiler core (used by HTTP server)
-│   ├── CompilerServer.java    ← HTTP server (port 8080)
-│   ├── MiniCompilerTest.java  ← 50 unit test cases (pure Java)
-│   └── start.bat              ← Windows: compile + start server
+├── backend/                       # Java backend
+│   ├── CompilerServer.java        # HTTP server implementation
+│   ├── MiniCompiler.java          # Compiler core logic
+│   ├── MiniCompilerTest.java      # Unit tests
+│   ├── start.bat                  # Windows startup script
+│   ├── MANIFEST.MF                # JAR manifest
+│   └── Dockerfile                 # Docker configuration
 │
-└── frontend/                  ← React 18 + TypeScript + Vite
-    ├── src/
-    │   ├── App.tsx            ← main component (theme toggle, SVG icons, all phases)
-    │   ├── App.css            ← CSS custom properties — light + dark themes
-    │   ├── api.ts             ← TypeScript API client
-    │   └── __tests__/
-    │       └── api.test.ts    ← 11 Vitest tests
-    ├── index.html
-    ├── vite.config.ts         ← /compile /vars /health → proxy to :8080
-    └── package.json
+└── frontend/                      # React frontend
+    ├── index.html                 # HTML template
+    ├── package.json               # Dependencies
+    ├── vite.config.ts             # Vite configuration
+    ├── tsconfig.json              # TypeScript configuration
+    ├── .env.example               # Environment variables template
+    ├── public/                    # Static assets
+    └── src/
+        ├── main.tsx               # Application entry point
+        ├── App.tsx                # Main component
+        ├── App.css                # Styles with themes
+        ├── api.ts                 # API client
+        └── __tests__/             # Test files
+            ├── api.test.ts        # API tests
+            └── setup.ts           # Test setup
 ```
 
-## UI
+## Prerequisites
 
-The frontend features a **dual-theme** interface (dark by default, toggle to light):
-- Collapsible **pipeline bar** showing all 7 compiler phases
-- **Token chips** — colour-coded by type (number, operator, identifier, etc.)
-- **AST viewer** with syntax-highlighted tree lines
-- **TAC code block** with line numbers and per-token colouring
-- **Constant-folding diff** — shows instructions saved
-- **Symbol table** — live variable watch, click to re-use
-- **History** — last 30 expressions, click to re-run
+- Java 17 or higher
+- Node.js 18 or higher
+- npm or yarn
 
----
+## Installation and Setup
 
-## Quick Start
+### Backend Setup
 
-### 1. Backend (Java server)
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
 
-```bat
-cd backend
-start.bat
+2. Compile and run the server:
+   ```
+   start.bat
+   ```
+
+   The server will start on http://localhost:8080
+
+### Frontend Setup
+
+1. Navigate to the frontend directory:
+   ```
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Start the development server:
+   ```
+   npm run dev
+   ```
+
+   The application will be available at http://localhost:5173
+
+## Usage
+
+### Web Interface
+
+Access the web interface at http://localhost:5173 to:
+- Enter arithmetic expressions
+- View compilation phases step-by-step
+- Inspect tokens, AST, TAC, and evaluation results
+- Manage variables and view symbol table
+- Toggle between light and dark themes
+
+### API Endpoints
+
+The backend provides the following REST endpoints:
+
+- `POST /compile`: Compile an expression
+- `GET /vars`: Retrieve symbol table
+- `POST /vars/clear`: Clear symbol table
+- `GET /health`: Health check
+
+### CLI Mode
+
+For command-line usage without the server:
+
 ```
-
-Server starts at **http://localhost:8080**
-
-Requires Java 17+. No Maven or external jars needed.
-
-### 2. Frontend (React dev server)
-
-```bat
-cd frontend
-npm install
-npm run dev
-```
-
-Open **http://localhost:5173** — the Vite dev server proxies `/compile`, `/vars`, `/health` to the Java backend automatically.
-
----
-
-## CLI Mode (no server needed)
-
-```bat
 javac -encoding UTF-8 MiniCompiler.java
 java MiniCompiler
 ```
+
+## Testing
+
+### Backend Tests
+
+Run the Java unit tests:
+
+```
+cd backend
+javac -encoding UTF-8 MiniCompiler.java MiniCompilerTest.java
+java MiniCompilerTest
+```
+
+### Frontend Tests
+
+Run the frontend tests:
+
+```
+cd frontend
+npm run test
+```
+
+## Deployment
+
+### Frontend (Vercel)
+
+The frontend is configured for deployment on Vercel:
+
+1. Connect the GitHub repository to Vercel
+2. Set the root directory to `frontend`
+3. Configure environment variables if needed
+4. Deploy
+
+### Backend (Render)
+
+The backend is configured for deployment on Render:
+
+1. Connect the GitHub repository to Render
+2. Create a new Web Service
+3. Set root directory to `backend`
+4. Use Docker runtime
+5. Deploy
+
+## Technologies Used
+
+- **Backend**: Java 17, HTTP Server API
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: CSS with custom properties for theming
+- **Testing**: Pure Java tests, Vitest
+- **Deployment**: Vercel, Render, Docker
+
+## License
+
+This project is developed for educational purposes in compiler design.
 
 Then type expressions at the prompt. Commands: `vars`, `clear`, `exit`.
 
@@ -145,12 +225,12 @@ npm test
 
 ## Tech Stack
 
-- **Java 17** — compiler core + HTTP server (`com.sun.net.httpserver`, zero dependencies)
+- **Java 17** - compiler core + HTTP server (`com.sun.net.httpserver`, zero dependencies)
 - **React 18** + **TypeScript** + **Vite 8**
-- **CSS Custom Properties** — full light/dark theme with `[data-theme]`
-- **Vitest** + **@testing-library/react** — frontend unit tests
-- **Feather-style SVG icons** — no emoji, no icon fonts, no external deps
+- **CSS Custom Properties** - full light/dark theme with `[data-theme]`
+- **Vitest** + **@testing-library/react** - frontend unit tests
+- **Feather-style SVG icons** - no emoji, no icon fonts, no external deps
 
 ---
 
-*Compiler Design Project — Java 17 + React 18 + TypeScript*
+*Compiler Design Project - Java 17 + React 18 + TypeScript*

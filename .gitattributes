@@ -4,7 +4,7 @@
 # Windows batch files keep CRLF
 *.bat  text eol=crlf
 
-# Binary files — no line-ending conversion
+# Binary files - no line-ending conversion
 *.pptx binary
 *.png  binary
 *.svg  binary
