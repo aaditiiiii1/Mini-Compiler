@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: mini-compiler-backend
+    runtime: java
+    buildCommand: cd backend && javac -encoding UTF-8 MiniCompiler.java CompilerServer.java && jar cfm compiler-server.jar MANIFEST.MF *.class
+    startCommand: cd backend && java -jar compiler-server.jar
+    envVars:
+      - key: PORT
+        value: 8080  # Render will override this dynamicallyservices:
+  - type: web
+    name: mini-compiler-backend
+    runtime: java
+    buildCommand: cd backend && javac -encoding UTF-8 MiniCompiler.java CompilerServer.java && jar cfm compiler-server.jar MANIFEST.MF *.class
+    startCommand: cd backend && java -jar compiler-server.jar
+    envVars:
+      - key: PORT
+        value: 8080  # Render will override this dynamically

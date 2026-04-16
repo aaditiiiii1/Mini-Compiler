@@ -20,7 +20,7 @@ import java.util.concurrent.*;
  */
 public class CompilerServer {
 
-    private static final int PORT = 8080;
+    private static final int PORT = Integer.parseInt(System.getenv().getOrDefault("PORT", "8080"));
     // Session-level symbol table shared across requests
     private static final Map<String, Double> sessionSymbols =
             Collections.synchronizedMap(new LinkedHashMap<>());
