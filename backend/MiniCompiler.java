@@ -3,7 +3,7 @@ import java.util.*;
 // MiniCompiler - A 7-phase mini arithmetic expression compiler
 public class MiniCompiler {
 
-    // =================== TOKEN TYPES ====================
+    // Token Types
     enum TokenType {
         NUMBER, PLUS, MINUS, MUL, DIV, MOD,
         LPAREN, RPAREN, ASSIGN, IDENTIFIER, EOF
@@ -23,7 +23,7 @@ public class MiniCompiler {
         @Override public String toString() { return value; }
     }
 
-    // =================== LEXER ==========================
+    // Lexer
     static class Lexer {
         private final String input;
         private int pos = 0;
@@ -86,7 +86,7 @@ public class MiniCompiler {
         private void warn(String msg) { warnings.add(msg); hasError = true; }
     }
 
-    // =================== AST NODES ======================
+    // AST NODES==
     interface ASTNode {
         String toJson();
     }
@@ -137,7 +137,7 @@ public class MiniCompiler {
     // =================== SYMBOL TABLE ===================
     static final Map<String, Double> symbolTable = new LinkedHashMap<>();
 
-    // =================== PARSER =========================
+    // PARSER=====
     static class Parser {
         private final List<Token> tokens;
         private int pos = 0;
@@ -321,7 +321,7 @@ public class MiniCompiler {
         List<String> getCode() { return code; }
     }
 
-    // =================== EVALUATOR ======================
+    // EVALUATOR==
     static class EvalResult {
         final double value;
         final List<String> errors;
@@ -429,7 +429,7 @@ public class MiniCompiler {
         }
     }
 
-    // =================== DEEP CLONE =====================
+    // DEEP CLONE=
     static ASTNode cloneAst(ASTNode n) {
         if (n instanceof NumberNode nd)      return new NumberNode(nd.value);
         if (n instanceof IdentifierNode id)  return new IdentifierNode(id.name);
@@ -486,7 +486,7 @@ public class MiniCompiler {
         return cr;
     }
 
-    // =================== UTILITIES ======================
+    // UTILITIES==
     static String fmt(double v) {
         return (v == Math.floor(v) && !Double.isInfinite(v))
                ? String.valueOf((long) v) : String.valueOf(v);
@@ -496,7 +496,7 @@ public class MiniCompiler {
         return s.replace("\\","\\\\").replace("\"","\\\"");
     }
 
-    // =================== CLI ============================
+    // CLI========
     public static void main(String[] args) {
         System.out.println("+-----------------------------------------------+");
         System.out.println("|          Mini-Compiler  Simulation             |");
@@ -562,3 +562,4 @@ public class MiniCompiler {
         System.out.println("\n-- " + label + " " + "-".repeat(Math.max(0, 48 - label.length())));
     }
 }
+

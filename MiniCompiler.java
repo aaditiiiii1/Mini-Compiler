@@ -3,7 +3,7 @@ import java.util.*;
 // MiniCompiler - 7-phase arithmetic compiler
 public class MiniCompiler {
 
-    // =================== TOKEN TYPES ====================
+    // Token Types
     enum TokenType {
         NUMBER, PLUS, MINUS, MUL, DIV, MOD,
         LPAREN, RPAREN, ASSIGN, IDENTIFIER, EOF
@@ -23,7 +23,7 @@ public class MiniCompiler {
         @Override public String toString() { return value; }
     }
 
-    // =================== LEXER ==========================
+    // Lexer
     static class Lexer {
         private final String input;
         private int pos = 0;
@@ -86,7 +86,7 @@ public class MiniCompiler {
         private void warn(String msg) { warnings.add(msg); hasError = true; }
     }
 
-    // =================== AST NODES ======================
+    // AST Nodes
     interface ASTNode {
         String toJson();
     }
@@ -134,10 +134,10 @@ public class MiniCompiler {
         }
     }
 
-    // =================== SYMBOL TABLE ===================
+    // Symbol Table
     static final Map<String, Double> symbolTable = new LinkedHashMap<>();
 
-    // =================== PARSER =========================
+    // Parser
     static class Parser {
         private final List<Token> tokens;
         private int pos = 0;
@@ -256,7 +256,7 @@ public class MiniCompiler {
         private void warn(String msg) { warnings.add(msg); hasError = true; }
     }
 
-    // =================== CONSTANT FOLDING ===============
+    // Constant Folding
     static ASTNode constantFold(ASTNode node) {
         if (node instanceof BinaryOpNode b) {
             b.left  = constantFold(b.left);
@@ -287,7 +287,7 @@ public class MiniCompiler {
         };
     }
 
-    // =================== TAC GENERATOR ==================
+    // TAC Generator
     static class CodeGenerator {
         private int tempCount = 0;
         private final List<String> code = new ArrayList<>();
@@ -321,7 +321,7 @@ public class MiniCompiler {
         List<String> getCode() { return code; }
     }
 
-    // =================== EVALUATOR ======================
+    // Evaluator
     static class EvalResult {
         final double value;
         final List<String> errors;
@@ -362,7 +362,7 @@ public class MiniCompiler {
         return 0;
     }
 
-    // =================== COMPILE RESULT =================
+    // Compile Result
     static class CompileResult {
         final String        input;
         final List<String>  tokens        = new ArrayList<>();
@@ -407,7 +407,7 @@ public class MiniCompiler {
         }
     }
 
-    // =================== AST TEXT PRINTER ===============
+    // AST Text Printer
     static class AstPrinter {
         final List<String> lines = new ArrayList<>();
         void print(ASTNode n, String indent, boolean last) {
@@ -429,7 +429,7 @@ public class MiniCompiler {
         }
     }
 
-    // =================== DEEP CLONE =====================
+    // Deep Clone
     static ASTNode cloneAst(ASTNode n) {
         if (n instanceof NumberNode nd)      return new NumberNode(nd.value);
         if (n instanceof IdentifierNode id)  return new IdentifierNode(id.name);
@@ -439,7 +439,7 @@ public class MiniCompiler {
         return new NumberNode(0);
     }
 
-    // =================== MAIN COMPILE API ===============
+    // Main Compile API
     // compile() - runs all 7 phases
     static CompileResult compile(String input, Map<String, Double> sym) {
         CompileResult cr = new CompileResult(input);
@@ -486,7 +486,7 @@ public class MiniCompiler {
         return cr;
     }
 
-    // =================== UTILITIES ======================
+    // Utilities
     static String fmt(double v) {
         return (v == Math.floor(v) && !Double.isInfinite(v))
                ? String.valueOf((long) v) : String.valueOf(v);
@@ -496,7 +496,7 @@ public class MiniCompiler {
         return s.replace("\\","\\\\").replace("\"","\\\"");
     }
 
-    // =================== CLI ============================
+    // CLI
     public static void main(String[] args) {
         System.out.println("+-----------------------------------------------+");
         System.out.println("|          Mini-Compiler  Simulation             |");
@@ -562,3 +562,4 @@ public class MiniCompiler {
         System.out.println("\n-- " + label + " " + "-".repeat(Math.max(0, 48 - label.length())));
     }
 }
+

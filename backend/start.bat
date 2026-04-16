@@ -11,3 +11,4 @@ echo [Build] Creating compiler-server.jar...
 jar cfm compiler-server.jar MANIFEST.MF *.class
 echo [Start] Server starting on http://localhost:8080
 java -jar compiler-server.jar
+

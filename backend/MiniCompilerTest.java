@@ -162,3 +162,4 @@ public class MiniCompilerTest {
         System.exit(fail > 0 ? 1 : 0);
     }
 }
+
